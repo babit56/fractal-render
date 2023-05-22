@@ -54,6 +54,7 @@ where
 pub struct FractalState {
     pub bounds: ((f64, f64), (f64, f64)),
     pub max_steps: usize,
+    pub func: fn(Complex) -> Complex,
 }
 
 impl FractalState {
@@ -68,5 +69,9 @@ impl FractalState {
             steps += 1;
         }
         steps
+    }
+
+    pub fn create_bytes(&self, points: usize) -> Vec<usize> {
+        // (0..points).map(|y| (0..points))
     }
 }

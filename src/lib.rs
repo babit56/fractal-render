@@ -4,9 +4,25 @@ use winit::{
     window::WindowBuilder,
 };
 use render::State;
+use mandelbrot::Complex;
+pub use mandelbrot::FractalState;
 
 mod texture;
 mod render;
+mod mandelbrot;
+
+pub fn create_image(state: FractalState) {
+    let (xlim, ylim) = state.bounds;
+    let width = xlim.1 - xlim.0;
+    let height = ylim.1 - ylim.0;
+    let img = image::ImageBuffer::from_fn(512, 512, |x, y| {
+        let cx = x as f64 / 512 as f64 * width - 2.;
+        let cy = y as f64 / 512 as f64 * height - 1.;
+        let steps = state.steps_out(Complex::new(cx, cy));
+        image::Rgb([steps as u8, 0, 0])
+    });
+    img.save("src/brot.png").unwrap();
+}
 
 pub async fn run() {
     env_logger::init();
